@@ -1,0 +1,25 @@
+version: '3'
+services:
+  webserver:
+    build: 
+      context: ../../
+      dockerfile: docker/dockerfiles/Dockerfile
+    container_name: webserver-home
+    volumes:
+      - ../../:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8081:80"
+    environment:
+      - BASE_HREF=home
+      - OAUTH_CLIENT_ID=${OKTA_GATEWAY_CLIENT_ID}
+      - OAUTH_ISSUER=${OKTA_ISSUER}
+      - OAUTH_AUDIENCE=${OKTA_AUDIENCE}
+      - OAUTH_APP_CLIENT_ID=${OKTA_HOME_SITE_CLIENT_ID}
+    networks: 
+      - gateway_gateway-net
+    command: npm start
+
+networks: 
+  gateway_gateway-net:
+    external: true
